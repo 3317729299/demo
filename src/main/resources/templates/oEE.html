@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ECharts</title>
+    <script src="/static/js/echarts.js"></script>
+
+    <script src="/static/js/jquery-3.4.1.js"></script>
+    <style>
+        .selectDiv {
+            float:  left;
+            height: 20px;
+            width: 30%;
+            margin-left: 30px;
+
+        }
+
+        .selectDiv1 {
+            float:  left;
+            height: 20px;
+            width: 30%;
+            margin-left: 30px;
+            margin-top: 70px;
+
+
+        }
+        label{
+            display:inline-block;
+            width:100px;
+            text-align: right;
+        }
+        select{
+            width: 100px;
+        }
+
+        td{
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        select{
+            width: 120px;
+        }
+        #startDate{
+            width: 120px;
+        }
+        #endDate{
+            width: 120px;
+        }
+
+    </style>
+
+
+</head>
+<body>
+<div id="searchDiv">
+
+    <div class="selectDiv">
+        <label for="workShop">车间</label>
+        <select id="workShop"  >
+            <option></option>
+        </select>
+    </div>
+
+    <div class="selectDiv">
+        <label for="productionLine">生产线</label>
+        <select id="productionLine">
+            <option></option>
+        </select>
+    </div>
+
+    <div class="selectDiv">
+        <label for="shift">班次</label>
+        <select id="shift"  >
+            <option></option>
+
+        </select>
+    </div>
+
+    <div class="selectDiv">
+    <label for="station">工位</label>
+    <select id="station"  multiple="multiple" >
+        <option></option>
+
+    </select>
+    </div>
+
+
+
+    <div class="selectDiv1">
+        <label for="startDate">开始日期</label>
+    <input type="date" id="startDate" value="2022-03-23" placeholder="开始日期">
+    </div>
+        <div class="selectDiv1">
+            <label for="endDate">结束日期</label>
+    <input type="date" id="endDate" value="2022-03-24" placeholder="结束日期">
+        </div>
+    <div class="">
+        <input id="submit" type="button" value="查询">
+    </div>
+</div>
+
+
+
+
+<div id="main" style="width: 625px;height:500px;position:absolute;top:150px;left: 150px"></div>
+
+<div id="data" style="width: 700px;height:400px;position:absolute;top:620px;left:150px">
+
+    <table id="tableO" border="1" cellspacing="0" cellpadding="0" style="margin:auto">
+
+
+    </table>
+
+</div>
+
+
+
+<!--<script>
+    //ready
+    $(function (){
+        var obj=document.getElementById("station");
+        var arr1 = [ "aaa", "bbb", "ccc" ];
+        $.each(arr1, function(i,val){
+            obj.options.add(new Option(val,val))
+
+        });
+        /*obj.options.add(new Option("5",5))*/
+
+    })
+
+</script>-->
+<script>
+
+
+</script>
+
+<script>
+
+    //柱形图
+    function  my(){
+        var   data ;
+        var stationList =[];
+        var series=[];
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var station= $("#station").val();
+        var  workShop= $("#workShop").val();
+        var  productionLine= $("#productionLine").val();
+        var  shift= $("#shift").val();
+        var  startDate= $("#startDate").val();
+        var  endDate= $("#endDate").val();
+        var jsonstr={"station": station,"startDate":startDate,"endDate":endDate,
+            "workShop": workShop,"productionLine":productionLine,"shift":shift}
+
+        $.ajax({
+            type:"POST",
+            url:"/equipment-number/listByModel",
+            dataType:"json",
+            contentType:"application/json",
+            async:false,
+            data: JSON.stringify(jsonstr),
+            success:function (result) {
+
+                data=result.retList;
+
+                stationList=result.stationList;
+                console.log("stationList",stationList)
+
+
+
+                 for(var i=0;i<stationList.length-1;i++){
+                     series.push( { type: 'bar' })
+                 }
+                 console.log("series"+series.toString())
+
+
+
+            }
+        })
+        var option = {
+            legend: {},
+            tooltip: {},
+       /* {"stationList":,"retList":}*/
+            dataset: {
+                dimensions: stationList,
+                source: data
+
+
+            },
+            xAxis: { type: 'category' },
+            /*yAxis: {},*/
+            yAxis: [
+                {
+                    type: 'value',
+                    axisLabel: {
+                        show: true,
+                        interval: 'auto',
+                        formatter: '{value} %'
+                    },
+                    show: true
+                }
+            ],
+            // Declare several bar series, each will be mapped
+            // to a column of dataset.source by default. , { type: 'bar' }
+            series: series
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option,true);
+
+        stationList.splice(0,stationList.length);
+        series.splice(0,stationList.length);
+        data="";
+    }
+    //table数据
+    function  autoFill(){
+
+        //清空table
+        var obj=document.getElementById("tableO");
+        obj.innerHTML='';
+
+        var station= $("#station").val();
+        var  workShop= $("#workShop").val();
+        var  productionLine= $("#productionLine").val();
+        var  shift= $("#shift").val();
+        var  startDate= $("#startDate").val();
+        var  endDate= $("#endDate").val();
+        var data={"station": station,"startDate":startDate,"endDate":endDate,
+            "workShop": workShop,"productionLine":productionLine,"shift":shift}
+
+
+
+        console.log("station="+station)
+        $.ajax({
+            type:"POST",
+            url:"/equipment-number/tableDataByModel",
+            dataType:"json",
+            contentType:"application/json",
+            data: JSON.stringify(data),
+            async:false,
+            success:function (result) {
+
+
+
+
+
+
+                var th="  <tr>\n" +
+                    "            <td>日期</td>\n" +
+                    "            <td>生产线</td>\n" +
+                    "            <td>工位</td>\n" +
+                    "            <td>良品数</td>\n" +
+                    "            <td>净工作时间</td>\n" +
+                    "            <td>生产节拍</td>\n" +
+                    "            <td>oEE</td>\n" +
+                    "            <td>班次</td>\n" +
+                    "        </tr>";
+                $("#tableO").append(th);
+                for (i=0;i<result.length;i++){
+                    var tr="  <tr>\n" +
+                        "            <td>"+result[i].date+"</td>\n" +
+                        "            <td>"+result[i].production_line+"</td>\n" +
+                        "            <td>"+result[i].station+"</td>\n" +
+                        "            <td>"+result[i].good_product+"</td>\n" +
+                        "            <td>"+result[i].workTime+"</td>\n" +
+                        "            <td>"+result[i].jp+"</td>\n" +
+                        "            <td>"+result[i].oee+"%</td>\n" +
+                        "            <td>"+result[i].shift+"</td>\n" +
+                        "        </tr>";
+
+                    $("#tableO").append(tr);
+                }
+
+
+
+
+
+
+            }
+        })
+
+    }
+    //工位
+    function station(jsonStr){
+        // 工位动态渲染下拉框
+        var obj=document.getElementById("station");
+        $.ajax({
+            type:"POST",
+            url:"/equipment-number/getStation",
+            dataType:"json",
+            data: JSON.stringify(jsonStr),
+            contentType:"application/json",
+            async:false,
+            success:function (result) {
+                for (var i = 0; i < result.length; i++){
+                    obj.options.add(new Option(result[i].station,result[i].station))
+                }
+            }
+        })
+    }
+    //班次
+    function shift(jsonStr){
+        // 工位动态渲染下拉框
+        var obj=document.getElementById("shift");
+        $.ajax({
+            type:"POST",
+            url:"/equipment-number/getShift",
+            dataType:"json",
+            contentType:"application/json",
+            data: JSON.stringify(jsonStr),
+            async:false,
+            success:function (result) {
+                for (var i = 0; i < result.length; i++){
+                    obj.options.add(new Option(result[i].shift,result[i].shift))
+                }
+            }
+        })
+    }
+    //生产线
+    function productionLine(jsonStr){
+        // 工位动态渲染下拉框
+        var obj=document.getElementById("productionLine");
+        $.ajax({
+            type:"POST",
+            url:"/equipment-number/getProductionLine",
+            dataType:"json",
+            contentType:"application/json",
+            data: JSON.stringify(jsonStr),
+            async:false,
+            success:function (result) {
+                for (var i = 0; i < result.length; i++){
+                    obj.options.add(new Option(result[i].productionLine,result[i].productionLine))
+                }
+            }
+        })
+    }
+    //车间
+    function workShop(){
+        // 工位动态渲染下拉框
+        var obj=document.getElementById("workShop");
+        $.ajax({
+            type:"POST",
+            url:"/equipment-number/getWorkShop",
+            dataType:"json",
+            async:false,
+            success:function (result) {
+                for (var i = 0; i < result.length; i++){
+                    obj.options.add(new Option(result[i].workShop,result[i].workShop))
+                }
+            }
+        })
+    }
+    //ready
+    $(function (){
+        // 工位动态渲染下拉框
+        workShop();
+        my();
+
+        autoFill();
+       /* var arr1 = [ "aaa", "bbb", "ccc" ];
+        $.each(arr1, function(i,val){
+            obj.options.add(new Option(val,val.station))
+
+        });*/
+        /*obj.options.add(new Option("5",5))*/
+ //点击提交时获取参数,传到后端
+
+        $("#submit").click(function (){
+
+            my();
+            autoFill();
+            }
+
+
+
+        )
+
+        $("#workShop").change(function (){
+
+            var  workShop= $("#workShop").val();
+            var jsonStr={"workShop": workShop}
+            productionLine(jsonStr);
+
+            }
+
+
+
+
+
+        )
+        $("#productionLine").change(function (){
+
+
+
+               var  productionLine= $("#productionLine").val();
+            var jsonStr={"productionLine":productionLine}
+            shift(jsonStr)
+
+
+        })
+
+        $("#shift").change(function (){
+
+
+
+            var  shift= $("#shift").val();
+
+            var jsonStr={"shift":shift}
+
+            station(jsonStr)
+
+
+        })
+
+
+    })
+
+</script>
+
+</body>
+</html>

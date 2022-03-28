@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mybatisPlus.mapper.EquipmentNumberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.demo.mybatisPlus.model.EquipmentNumber">
+        <id column="id" property="id" />
+        <result column="work_shop" property="workShop" />
+        <result column="production_line" property="productionLine" />
+        <result column="station" property="station" />
+        <result column="shift" property="shift" />
+        <result column="serial_number" property="serialNumber" />
+        <result column="date" property="date" />
+        <result column="qualified" property="qualified" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, work_shop, production_line, station, shift, serial_number, date, qualified
+    </sql>
+    <select id="getStation" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
+        select distinct  station from PP_EQUIPMENT_NUMBER
+        <if test="shift!=null  and shift!=''">
+            where shift = #{shift}
+        </if>
+
+    </select>
+    <select id="listByModel" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
+        select   distinct station  from PP_EQUIPMENT_NUMBER
+        where  qualified=0
+        <if test="stations!=null  and stations!=''">
+            and station in (${stations})
+        </if>
+
+        <if test="startDate!=null  and startDate!=''">
+            and date &gt;= date_format(#{startDate} ,'%Y-%m-%d')
+        </if>
+        <if test="endDate!=null  and endDate!=''">
+            and date &lt;= date_format(#{endDate} ,'%Y-%m-%d')
+        </if>
+        <if test="workShop!=null  and workShop!=''">
+            and work_shop = #{workShop}
+        </if>
+        <if test="productionLine!=null  and productionLine!=''">
+            and production_line = #{productionLine}
+        </if>
+        <if test="shift!=null  and shift!=''">
+            and shift = #{shift}
+        </if>
+
+    </select>
+    <select id="tableDataByModel" resultType="java.util.Map">
+        select   dat.station,dat.date,dat.production_line,dat.work_shop,dat.good_product,dat.workTime
+             ,54 jp, round(good_product*5400/workTime,4) oee,dat.shift
+        from
+            (select  t.* , TIME_TO_SEC(w.end_date)-TIME_TO_SEC(w.start_date)+TIME_TO_SEC(r.start_date)-TIME_TO_SEC(r.end_date) workTime from
+                (SELECT
+                     count( * ) good_product,
+                     work_shop,
+                     production_line,
+                     station,
+                     shift,
+                     date
+                 FROM
+                     PP_EQUIPMENT_NUMBER
+        where  qualified=0
+        <if test="stations!=null  and stations!=''">
+            and station in (${stations})
+        </if>
+
+        <if test="startDate!=null  and startDate!=''">
+            and date &gt;= date_format(#{startDate} ,'%Y-%m-%d')
+        </if>
+        <if test="endDate!=null  and endDate!=''">
+            and date &lt;= date_format(#{endDate} ,'%Y-%m-%d')
+        </if>
+        <if test="date!=null  and date!=''">
+            and date = date_format(#{date} ,'%Y-%m-%d')
+        </if>
+        <if test="workShop!=null  and workShop!=''">
+            and work_shop = #{workShop}
+        </if>
+        <if test="productionLine!=null  and productionLine!=''">
+            and production_line = #{productionLine}
+        </if>
+        <if test="shift!=null  and shift!=''">
+            and shift = #{shift}
+        </if>
+                 GROUP BY
+                     date,
+                     work_shop,
+                     production_line,
+                     shift,
+                     station order by date )t left join
+
+                pp_rest_time r on t.shift=r.shift  left join  pp_work_time w
+                                                              on t.shift =w.shift) dat
+    </select>
+    <select id="getProductionLine" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
+        select distinct production_line   from PP_EQUIPMENT_NUMBER
+        <if test="workShop!=null  and workShop!=''">
+            where work_shop = #{workShop}
+        </if>
+
+    </select>
+    <select id="getShift" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
+        select  distinct shift   from PP_EQUIPMENT_NUMBER
+        <if test="productionLine!=null  and productionLine!=''">
+            where production_line = #{productionLine}
+        </if>
+    </select>
+    <select id="getWorkShop" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
+        select  distinct work_shop   from PP_EQUIPMENT_NUMBER
+
+    </select>
+
+</mapper>

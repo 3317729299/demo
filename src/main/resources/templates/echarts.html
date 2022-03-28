@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>质量饼图</title>
+    <script src="/static/js/echarts.js"></script>
+    <script src="/static/js/jquery-3.4.1.js"></script>
+
+    <style>
+        *{margin:0;padding:0}
+        html,body{
+            width:100%;
+            height:100%;
+        }
+        /*#main{*/
+        /*    width:600px;*/
+        /*    height:450px;*/
+        /*    margin: 150px auto;*/
+        /*    border:1px solid #ddd;*/
+        /*}*/
+        /*默认长宽比0.75*/
+        .aa{
+            /*width: 200px;*/
+            /*height: 200px;*/
+            text-align: center;
+            background: #000;
+            color: #fff;
+            font-size: 28px;
+
+        }
+        td{
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="aa" style="top: 10px;bottom: 10px">周质量问题</h1>
+
+<table id="tableO" border="1" cellspacing="0" cellpadding="0" style="position:absolute;top:50px; width:600px;height: 150px;margin-left: 560px">
+    <tr>
+        <td></td>
+        <td>星期一</td>
+        <td>星期二</td>
+        <td>星期三</td>
+
+        <td>星期四</td>
+        <td>星期五</td>
+        <td>星期六</td>
+        <td>星期日</td>
+        <td>汇总</td>
+    </tr>
+    <tr>
+        <td>过程质量</td>
+
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+    </tr>
+    <tr>
+        <td>客户抱怨</td>
+
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+
+    </tr>
+</table>
+<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+<div id="main" style="width: 500px;height:400px;position:absolute;top:250px;left: 150px"></div>
+<div id="main2" style="width: 500px;height:400px;position:absolute;top:250px;left:550px"></div>
+<div id="main3" style="width: 500px;height:400px;position:absolute;top:250px;left:950px"></div>
+
+<script type="text/javascript">
+    $(function (){
+        //客户抱怨
+        $.ajax({
+            type:"POST",
+            url:"/customercomplaint/week",
+            dataType:"json",
+            async:false,
+            success:function (data) {
+                var str1=data;
+                console.log("str1="+str1)
+                var jsonData = JSON.stringify(str1);
+
+                console.log("jsonData="+jsonData)
+                console.log("jsonData.a2="+str1.a2)
+                $("#tableO tr:nth-child(3) td:nth-child(2)").html(data.a0);
+                $("#tableO tr:nth-child(3) td:nth-child(3)").html(data.a1);
+                $("#tableO tr:nth-child(3) td:nth-child(4)").html(data.a2);
+                $("#tableO tr:nth-child(3) td:nth-child(5)").html(data.a3);
+                $("#tableO tr:nth-child(3) td:nth-child(6)").html(data.a4);
+                $("#tableO tr:nth-child(3) td:nth-child(7)").html(data.a5);
+                $("#tableO tr:nth-child(3) td:nth-child(8)").html(data.a6);
+                $("#tableO tr:nth-child(3) td:nth-child(9)").html(data.a9);
+
+
+
+
+            }
+        })
+        //过程质量
+        $.ajax({
+            type:"POST",
+            url:"/processquality/week",
+            dataType:"json",
+            async:false,
+            success:function (data) {
+                //从后台拿到的data 就是一个json对象
+                var str1=data;
+                console.log("str1="+str1)
+                //把json对象转换成 json 字符串
+                var jsonData = JSON.stringify(str1);
+
+                console.log("jsonData="+jsonData)
+                console.log("jsonData.a2="+str1.a2)
+                $("#tableO tr:nth-child(2) td:nth-child(2)").html(data.a0);
+                $("#tableO tr:nth-child(2) td:nth-child(3)").html(data.a1);
+                $("#tableO tr:nth-child(2) td:nth-child(4)").html(data.a2);
+                $("#tableO tr:nth-child(2) td:nth-child(5)").html(data.a3);
+                $("#tableO tr:nth-child(2) td:nth-child(6)").html(data.a4);
+                $("#tableO tr:nth-child(2) td:nth-child(7)").html(data.a5);
+                $("#tableO tr:nth-child(2) td:nth-child(8)").html(data.a6);
+                $("#tableO tr:nth-child(2) td:nth-child(9)").html(data.a9);
+
+
+
+
+            }
+        })
+    })
+
+</script>
+<script type="text/javascript">
+    var myChart2 = echarts.init(document.getElementById('main3'));
+
+    var option2 = {
+        title : {
+            text: '客户抱怨',
+            subtext: '',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+        },
+        series : [
+            {
+                name: "",
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:(function () {
+
+                    var datas = [];
+                    $.ajax({
+                        type:"POST",
+                        url:"/customercomplaint/listToday",
+                        dataType:"json",
+                        async:false,
+                        success:function (result) {
+
+                            for (var i = 0; i < result.length; i++){
+                                datas.push({
+                                    "value":result[i].complainNumber, "name":result[i].complainType
+                                })
+                            }
+
+                        }
+                    })
+                    return datas;
+
+                })(),
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    myChart2.setOption(option2);
+
+
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var option = {
+        title : {
+            text: '过程质量',
+            subtext: '',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+        },
+        series : [
+            {
+                name: "",
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:(function () {
+
+                    var datas = [];
+                    $.ajax({
+                        type:"POST",
+                        url:"/processquality/listToday",
+                        dataType:"json",
+                        async:false,
+                        success:function (result) {
+
+                            for (var i = 0; i < result.length; i++){
+                                datas.push({
+                                    "value":result[i].qualityIssuesNumber, "name":result[i].qualityIssuesType
+                                })
+                            }
+
+                        }
+                    })
+                    return datas;
+
+                })(),
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+
+
+
+</script>
+</body>
