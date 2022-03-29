@@ -287,6 +287,7 @@
     function station(jsonStr){
         // 工位动态渲染下拉框
         var obj=document.getElementById("station");
+        obj.options.add(new Option('',''))
         $.ajax({
             type:"POST",
             url:"/equipment-number/getStation",
@@ -305,6 +306,7 @@
     function shift(jsonStr){
         // 工位动态渲染下拉框
         var obj=document.getElementById("shift");
+        obj.options.add(new Option('',''))
         $.ajax({
             type:"POST",
             url:"/equipment-number/getShift",
@@ -323,6 +325,7 @@
     function productionLine(jsonStr){
         // 工位动态渲染下拉框
         var obj=document.getElementById("productionLine");
+        obj.options.add(new Option('',''))
         $.ajax({
             type:"POST",
             url:"/equipment-number/getProductionLine",
@@ -382,6 +385,9 @@
 
             var  workShop= $("#workShop").val();
             var jsonStr={"workShop": workShop}
+            $("#productionLine").empty();
+
+
             productionLine(jsonStr);
 
             }
@@ -397,6 +403,7 @@
 
                var  productionLine= $("#productionLine").val();
             var jsonStr={"productionLine":productionLine}
+            $("#shift").empty();
             shift(jsonStr)
 
 
@@ -409,6 +416,7 @@
             var  shift= $("#shift").val();
 
             var jsonStr={"shift":shift}
+            $("#station").empty();
 
             station(jsonStr)
 
