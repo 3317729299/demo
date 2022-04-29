@@ -1,6 +1,6 @@
 package com.example.demo.util;
 
-import com.example.demo.mybatisPlus.annotation.ExportConfig;
+import com.example.demo.mybatisplus.annotation.ExportConfig;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;

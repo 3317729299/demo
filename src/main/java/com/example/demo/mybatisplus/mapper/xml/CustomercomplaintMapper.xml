@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mybatisPlus.mapper.CustomercomplaintMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.demo.mybatisplus.model.Customercomplaint">
+        <id column="id" property="id"/>
+        <result column="date" property="date"/>
+        <result column="complain_type" property="complainType"/>
+        <result column="complain_number" property="complainNumber"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, date, complain_type, complain_number
+    </sql>
+    <select id="listToday" resultType="com.example.demo.mybatisplus.model.Customercomplaint">
+        select id, date, complain_type, complain_number from PP_CUSTOMERCOMPLAINT where date_format(date,'%Y-%m-%d')=
+        date_format(SYSDATE(),'%Y-%m-%d')
+
+    </select>
+    <select id="ListWeek" resultType="java.util.Map">
+        select sum( t.complain_number ) sum,weekday(t.date) weekday from pp_customercomplaint t
+        where date_format(t.date ,'%Y-%m-%d')
+        BETWEEN date_sub(curdate(),interval WEEKDAY(curdate()) day) and curdate( )
+        #BETWEEN '2022-03-20' and'2022-03-24'
+        GROUP BY weekday(t.date),date_sub(curdate(),interval WEEKDAY(curdate()) day), curdate( )
+        union
+
+        SELECT
+        sum( t.complain_number ) sum,
+        9 weekday
+        FROM
+        pp_customercomplaint t
+        WHERE
+        date_format(t.date ,'%Y-%m-%d') BETWEEN date_sub(curdate(),interval WEEKDAY(curdate()) day) and curdate( )
+    </select>
+
+</mapper>
