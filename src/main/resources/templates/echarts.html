@@ -8,11 +8,16 @@
     <script src="/static/js/jquery-3.4.1.js"></script>
 
     <style>
-        *{margin:0;padding:0}
-        html,body{
-            width:100%;
-            height:100%;
+        * {
+            margin: 0;
+            padding: 0
         }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
         /*#main{*/
         /*    width:600px;*/
         /*    height:450px;*/
@@ -20,7 +25,7 @@
         /*    border:1px solid #ddd;*/
         /*}*/
         /*默认长宽比0.75*/
-        .aa{
+        .aa {
             /*width: 200px;*/
             /*height: 200px;*/
             text-align: center;
@@ -29,7 +34,8 @@
             font-size: 28px;
 
         }
-        td{
+
+        td {
             text-align: center;
             vertical-align: middle;
         }
@@ -39,7 +45,8 @@
 
 <h1 class="aa" style="top: 10px;bottom: 10px">周质量问题</h1>
 
-<table id="tableO" border="1" cellspacing="0" cellpadding="0" style="position:absolute;top:50px; width:600px;height: 150px;margin-left: 560px">
+<table id="tableO" border="1" cellspacing="0" cellpadding="0"
+       style="position:absolute;top:50px; width:600px;height: 150px;margin-left: 560px">
     <tr>
         <td></td>
         <td>星期一</td>
@@ -85,20 +92,20 @@
 <div id="main3" style="width: 500px;height:400px;position:absolute;top:250px;left:950px"></div>
 
 <script type="text/javascript">
-    $(function (){
+    $(function () {
         //客户抱怨
         $.ajax({
-            type:"POST",
-            url:"/customercomplaint/week",
-            dataType:"json",
-            async:false,
-            success:function (data) {
-                var str1=data;
-                console.log("str1="+str1)
+            type: "POST",
+            url: "/customercomplaint/week",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                var str1 = data;
+                console.log("str1=" + str1)
                 var jsonData = JSON.stringify(str1);
 
-                console.log("jsonData="+jsonData)
-                console.log("jsonData.a2="+str1.a2)
+                console.log("jsonData=" + jsonData)
+                console.log("jsonData.a2=" + str1.a2)
                 $("#tableO tr:nth-child(3) td:nth-child(2)").html(data.a0);
                 $("#tableO tr:nth-child(3) td:nth-child(3)").html(data.a1);
                 $("#tableO tr:nth-child(3) td:nth-child(4)").html(data.a2);
@@ -109,25 +116,23 @@
                 $("#tableO tr:nth-child(3) td:nth-child(9)").html(data.a9);
 
 
-
-
             }
         })
         //过程质量
         $.ajax({
-            type:"POST",
-            url:"/processquality/week",
-            dataType:"json",
-            async:false,
-            success:function (data) {
+            type: "POST",
+            url: "/processquality/week",
+            dataType: "json",
+            async: false,
+            success: function (data) {
                 //从后台拿到的data 就是一个json对象
-                var str1=data;
-                console.log("str1="+str1)
+                var str1 = data;
+                console.log("str1=" + str1)
                 //把json对象转换成 json 字符串
                 var jsonData = JSON.stringify(str1);
 
-                console.log("jsonData="+jsonData)
-                console.log("jsonData.a2="+str1.a2)
+                console.log("jsonData=" + jsonData)
+                console.log("jsonData.a2=" + str1.a2)
                 $("#tableO tr:nth-child(2) td:nth-child(2)").html(data.a0);
                 $("#tableO tr:nth-child(2) td:nth-child(3)").html(data.a1);
                 $("#tableO tr:nth-child(2) td:nth-child(4)").html(data.a2);
@@ -136,8 +141,6 @@
                 $("#tableO tr:nth-child(2) td:nth-child(7)").html(data.a5);
                 $("#tableO tr:nth-child(2) td:nth-child(8)").html(data.a6);
                 $("#tableO tr:nth-child(2) td:nth-child(9)").html(data.a9);
-
-
 
 
             }
@@ -149,12 +152,12 @@
     var myChart2 = echarts.init(document.getElementById('main3'));
 
     var option2 = {
-        title : {
+        title: {
             text: '客户抱怨',
             subtext: '',
-            x:'center'
+            x: 'center'
         },
-        tooltip : {
+        tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
@@ -162,25 +165,25 @@
             orient: 'vertical',
             left: 'left',
         },
-        series : [
+        series: [
             {
                 name: "",
                 type: 'pie',
-                radius : '55%',
+                radius: '55%',
                 center: ['50%', '60%'],
-                data:(function () {
+                data: (function () {
 
                     var datas = [];
                     $.ajax({
-                        type:"POST",
-                        url:"/customercomplaint/listToday",
-                        dataType:"json",
-                        async:false,
-                        success:function (result) {
+                        type: "POST",
+                        url: "/customercomplaint/listToday",
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
 
-                            for (var i = 0; i < result.length; i++){
+                            for (var i = 0; i < result.length; i++) {
                                 datas.push({
-                                    "value":result[i].complainNumber, "name":result[i].complainType
+                                    "value": result[i].complainNumber, "name": result[i].complainType
                                 })
                             }
 
@@ -205,12 +208,12 @@
     var myChart = echarts.init(document.getElementById('main'));
 
     var option = {
-        title : {
+        title: {
             text: '过程质量',
             subtext: '',
-            x:'center'
+            x: 'center'
         },
-        tooltip : {
+        tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
@@ -218,25 +221,25 @@
             orient: 'vertical',
             left: 'left',
         },
-        series : [
+        series: [
             {
                 name: "",
                 type: 'pie',
-                radius : '55%',
+                radius: '55%',
                 center: ['50%', '60%'],
-                data:(function () {
+                data: (function () {
 
                     var datas = [];
                     $.ajax({
-                        type:"POST",
-                        url:"/processquality/listToday",
-                        dataType:"json",
-                        async:false,
-                        success:function (result) {
+                        type: "POST",
+                        url: "/processquality/listToday",
+                        dataType: "json",
+                        async: false,
+                        success: function (result) {
 
-                            for (var i = 0; i < result.length; i++){
+                            for (var i = 0; i < result.length; i++) {
                                 datas.push({
-                                    "value":result[i].qualityIssuesNumber, "name":result[i].qualityIssuesType
+                                    "value": result[i].qualityIssuesNumber, "name": result[i].qualityIssuesType
                                 })
                             }
 
@@ -256,8 +259,6 @@
         ]
     };
     myChart.setOption(option);
-
-
 
 
 </script>

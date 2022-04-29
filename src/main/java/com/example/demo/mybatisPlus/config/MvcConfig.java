@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @description:类描述：静态资源放行
- * @author:trd  感觉得写全路径
+ * @author:trd 感觉得写全路径
  * @date:2022-03-22 15:21
  */
 @Component

@@ -13,7 +13,7 @@ import java.sql.SQLFeatureNotSupportedException;
 import java.util.logging.Logger;
 
 /**
- * @description:类描述：自己写  不完善
+ * @description:类描述：自己写 不完善
  * @author:trd
  * @date:2022-03-14 12:44
  */
@@ -26,13 +26,14 @@ public class DynamicDataSource implements DataSource, InitializingBean {//Initia
     DataSource dataSource2;
 
     //当前使用的数据源标识
-    public  static ThreadLocal<String> name=new ThreadLocal<>();  //ThreadLocal 线程安全
+    public static ThreadLocal<String> name = new ThreadLocal<>();  //ThreadLocal 线程安全
+
     @Override
     public Connection getConnection() throws SQLException {
-        if(name.get().equals("W")){
+        if (name.get().equals("W")) {
 
-        return dataSource1.getConnection();}
-        else {
+            return dataSource1.getConnection();
+        } else {
             return dataSource2.getConnection();
         }
     }

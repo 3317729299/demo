@@ -19,6 +19,7 @@ public class activeMq {
             e.printStackTrace();
         }
     }
+
     public static void send(String messageStr)
             throws JMSException {
         // 这里为简便，依赖ActiveMQ的JMS实现。现实程序中可以通过jndi查找方式查找factory，这样彻底避免关联特定JMS实现者。并拥有最大的可移植性。

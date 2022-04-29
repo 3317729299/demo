@@ -27,26 +27,27 @@ public class ProcessqualityController {
     private ProcessqualityService processqualityService;
 
     @RequestMapping("/list")
-    public List<Processquality> list(){
+    public List<Processquality> list() {
 
-      return   processqualityService.list();
+        return processqualityService.list();
     }
 
     /**
      * 今天的质量问题
+     *
      * @return
      */
     @RequestMapping("/listToday")
-    public List<Processquality> listToday(){
+    public List<Processquality> listToday() {
 
-        return   processqualityService.listToday();
+        return processqualityService.listToday();
     }
 
     @RequestMapping("/week")
     @ResponseBody
-    public Map<String,Object> week(){
+    public Map<String, Object> week() {
         /*String jsonString = JSONObject.toJSONString( customercomplaintService.week());*/
-        return  processqualityService.ListWeek();
+        return processqualityService.ListWeek();
 
     }
 

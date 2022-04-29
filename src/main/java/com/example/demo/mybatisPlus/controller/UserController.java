@@ -29,18 +29,17 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/saveOrUpdate")
-    public String saveOrUpdate(@RequestBody(required=false) User user ) {
+    public String saveOrUpdate(@RequestBody(required = false) User user) {
         //盐值加密 把盐存入数据库
         String salt = Md5Salt.getRandomString(4);
         //把盐存入数据库
         user.setSalt(salt);
         StringBuffer sb = new StringBuffer(user.getPassword());
         StringBuffer pass = sb.append(salt);
-        String spass=new String(pass);
+        String spass = new String(pass);
         String md5Str = SecureUtil.md5(spass);
 
-        System.out.println("md5Str"+md5Str);
-
+        System.out.println("md5Str" + md5Str);
 
 
         user.setPassword(md5Str);
@@ -51,9 +50,6 @@ public class UserController {
             return "失败";
         }
     }
-
-
-
 
 
 }

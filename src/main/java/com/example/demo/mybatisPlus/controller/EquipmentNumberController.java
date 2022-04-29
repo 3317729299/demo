@@ -37,8 +37,6 @@ public class EquipmentNumberController {
 
 
     /**
-     *
-     *
      * @return 所有的班次
      */
     @RequestMapping("/getShift")
@@ -48,8 +46,6 @@ public class EquipmentNumberController {
 
 
     /**
-     *
-     *
      * @return 所有的生产线
      */
     @RequestMapping("/getProductionLine")
@@ -58,8 +54,6 @@ public class EquipmentNumberController {
     }
 
     /**
-     *
-     *
      * @return 所有的车间
      */
     @RequestMapping("/getWorkShop")
@@ -68,9 +62,9 @@ public class EquipmentNumberController {
     }
 
 
-
     /**
      * 批量插入测试数据
+     *
      * @param map
      * @return
      */
@@ -120,13 +114,11 @@ public class EquipmentNumberController {
     }
 
 
-
-
     /**
      * @return 柱形
      */
     @RequestMapping("/listByModel")
-    public Map<String,Object> listByModel(@RequestBody(required = false) Map<String, Object> map) throws ParseException {
+    public Map<String, Object> listByModel(@RequestBody(required = false) Map<String, Object> map) throws ParseException {
         //把前端传过来的 ArrayList 数组转换成字符串
         StringBuilder sb = new StringBuilder();
         ArrayList<String> stations = (ArrayList<String>) map.get("station");
@@ -135,9 +127,9 @@ public class EquipmentNumberController {
         }
         //值不为空就 去掉后面的，传值
         if (sb.length() > 0) {
-           if(!"''".equals(sb.substring(0, sb.length() - 1))) {
-               map.put("stations", sb.substring(0, sb.length() - 1));
-           }
+            if (!"''".equals(sb.substring(0, sb.length() - 1))) {
+                map.put("stations", sb.substring(0, sb.length() - 1));
+            }
 
         }
 
@@ -173,17 +165,16 @@ public class EquipmentNumberController {
             retList.add(retMap);
         }
 
-        List<String> list= equipmentNumberService.listByModel(map);
-        System.out.println("list="+list.toString());
+        List<String> list = equipmentNumberService.listByModel(map);
+        System.out.println("list=" + list.toString());
 
 
-        Map<String,Object> retMap=new HashMap<>();
-        retMap.put("retList",retList);
-        retMap.put("stationList",list);
+        Map<String, Object> retMap = new HashMap<>();
+        retMap.put("retList", retList);
+        retMap.put("stationList", list);
 
         return retMap;
     }
-
 
 
     @RequestMapping("/tableDataByModel")
@@ -196,7 +187,7 @@ public class EquipmentNumberController {
         }
         //值不为空就 去掉后面的，传值
         if (sb.length() > 0) {
-            if(!"''".equals(sb.substring(0, sb.length() - 1))) {
+            if (!"''".equals(sb.substring(0, sb.length() - 1))) {
                 map.put("stations", sb.substring(0, sb.length() - 1));
             }
 
@@ -218,20 +209,18 @@ public class EquipmentNumberController {
             map.put("stations", sb.substring(0, sb.length() - 1));
         }
 
-       List<String> list= equipmentNumberService.listByModel(map);
-        String retStr="['product'";
+        List<String> list = equipmentNumberService.listByModel(map);
+        String retStr = "['product'";
         for (String s : list) {
-            retStr=     retStr+",'"+s+"'";
-            
+            retStr = retStr + ",'" + s + "'";
+
         }
-        retStr=retStr+"]";
-        System.out.println("retStr="+retStr);
-       //  ['product', 'WC_CB_OP_271', 'WC_CB_OP_280', 'WC_CB_OP_290']
+        retStr = retStr + "]";
+        System.out.println("retStr=" + retStr);
+        //  ['product', 'WC_CB_OP_271', 'WC_CB_OP_280', 'WC_CB_OP_290']
         return retStr;
 
     }
-
-
 
 
 }

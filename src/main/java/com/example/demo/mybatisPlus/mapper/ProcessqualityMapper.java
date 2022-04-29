@@ -16,10 +16,9 @@ import java.util.Map;
  * @since 2022-03-22
  */
 public interface ProcessqualityMapper extends BaseMapper<Processquality> {
-    public List<Processquality> listToday ();
+    public List<Processquality> listToday();
 
-    public  List<Map<String, Object>> ListWeek();
-
+    public List<Map<String, Object>> ListWeek();
 
 
 }

@@ -22,14 +22,15 @@ import java.util.Map;
 @Service
 public class ProcessqualityServiceImpl extends ServiceImpl<ProcessqualityMapper, Processquality> implements ProcessqualityService {
     @Autowired(required = false)
-    private  ProcessqualityMapper processqualityMapper;
+    private ProcessqualityMapper processqualityMapper;
+
     @Override
     public Map<String, Object> ListWeek() {
-        List<Map<String, Object>>  list= processqualityMapper.ListWeek();
+        List<Map<String, Object>> list = processqualityMapper.ListWeek();
         //新建一个map集合来 存储数据
-        Map<String, Object> map=new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         for (Map<String, Object> stringObjectMap : list) {
-            map.put("a"+String.valueOf(stringObjectMap.get("weekday")) ,String.valueOf(stringObjectMap.get("sum")) );
+            map.put("a" + String.valueOf(stringObjectMap.get("weekday")), String.valueOf(stringObjectMap.get("sum")));
         }
         return map;
 

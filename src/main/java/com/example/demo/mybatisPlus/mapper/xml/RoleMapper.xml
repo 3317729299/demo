@@ -4,20 +4,20 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.demo.mybatisPlus.model.Role">
-        <id column="role_id" property="roleId" />
-        <result column="role_name" property="roleName" />
+        <id column="role_id" property="roleId"/>
+        <result column="role_name" property="roleName"/>
         <collection property="menus" ofType="com.example.demo.mybatisPlus.model.RoleMenu">
-            <id column="role_id" property="roleId" />
+            <id column="role_id" property="roleId"/>
             <result column="menu_id" property="menuId"></result>
 
         </collection>
     </resultMap>
 
 
-
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        role_id, role_name, role_key, role_sort, data_scope, menu_check_strictly, dept_check_strictly, status, del_flag, create_by, create_time, update_by, update_time, remark
+        role_id, role_name, role_key, role_sort, data_scope, menu_check_strictly, dept_check_strictly, status, del_flag,
+        create_by, create_time, update_by, update_time, remark
     </sql>
     <select id="roleAndMenu" resultType="com.example.demo.mybatisPlus.model.Role">
         select role_id, role_name, role_key, role_sort, data_scope, menu_check_strictly from sys_role

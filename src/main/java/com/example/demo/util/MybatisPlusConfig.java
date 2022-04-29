@@ -35,7 +35,7 @@ public class MybatisPlusConfig {
 
         mpg.setGlobalConfig(gc);
         //3.数据源配置
-        DataSourceConfig dsc=new DataSourceConfig();
+        DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://localhost:3306/hanthink?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=CTT");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
@@ -44,7 +44,7 @@ public class MybatisPlusConfig {
         /*dsc.setSchemaName("plus_demo");*/
         mpg.setDataSource(dsc);
         //4包配置
-        PackageConfig pc=new PackageConfig();
+        PackageConfig pc = new PackageConfig();
         pc.setModuleName("");
         pc.setParent("com.example.demo.mybatisPlus");
 
@@ -54,14 +54,14 @@ public class MybatisPlusConfig {
         pc.setMapper("mapper");
         mpg.setPackageInfo(pc);
 
-        TemplateConfig templateConfig=new TemplateConfig();
+        TemplateConfig templateConfig = new TemplateConfig();
         /*templateConfig.setController("templates/controller.java.vm");*/
         /* templateConfig.setXml("templates/mapper.xml.vm");*/
 
         mpg.setTemplate(templateConfig);
 
         //5.策略配置
-        StrategyConfig strategyConfig=new StrategyConfig();
+        StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setInclude("pp_work_time");//对哪张表生成
         strategyConfig.setControllerMappingHyphenStyle(false);
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略

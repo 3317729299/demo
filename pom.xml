@@ -61,28 +61,28 @@
             <version>2.2</version>
         </dependency>
         <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-annotation</artifactId>
-        <version>3.2.0</version>
-    </dependency>
-    <dependency>
-        <groupId>com.baomidou</groupId>
-        <artifactId>mybatis-plus-extension</artifactId>
-        <version>3.2.0</version>
-    </dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>3.2.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
-      <!--  thymeleaf-->
+        <!--  thymeleaf-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-    <!--mybatis_plus-->
+        <!--mybatis_plus-->
 
         <!--hutool 工具集合引入-->
         <dependency>
@@ -98,7 +98,7 @@
             <version>1.1.10</version>
         </dependency>
 
-      <!--poi导入导出-->
+        <!--poi导入导出-->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -142,7 +142,6 @@
     </dependencies>
 
 
-
     <build>
         <plugins>
             <plugin>
@@ -163,7 +162,7 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                        <include>com/example/demo/mybatisPlus/mapper/xml/*.xml</include>
+                    <include>com/example/demo/mybatisPlus/mapper/xml/*.xml</include>
                 </includes>
             </resource>
             <resource>
@@ -171,9 +170,7 @@
             </resource>
 
 
-
         </resources>
-
 
 
     </build>

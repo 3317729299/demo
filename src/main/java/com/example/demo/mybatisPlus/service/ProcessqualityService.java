@@ -16,8 +16,8 @@ import java.util.Map;
  */
 public interface ProcessqualityService extends IService<Processquality> {
 
-   Map<String, Object> ListWeek();
+    Map<String, Object> ListWeek();
 
-   public List<Processquality> listToday ();
+    public List<Processquality> listToday();
 
 }

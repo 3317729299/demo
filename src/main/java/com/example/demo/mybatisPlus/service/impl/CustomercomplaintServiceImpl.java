@@ -38,11 +38,11 @@ public class CustomercomplaintServiceImpl extends ServiceImpl<CustomercomplaintM
 
     @Override
     public Map<String, Object> week() {
-      List<Map<String, Object>>  list= customercomplaintMapper.ListWeek();
-      //新建一个map集合来 存储数据
-        Map<String, Object> map=new HashMap<>();
+        List<Map<String, Object>> list = customercomplaintMapper.ListWeek();
+        //新建一个map集合来 存储数据
+        Map<String, Object> map = new HashMap<>();
         for (Map<String, Object> stringObjectMap : list) {
-            map.put("a"+String.valueOf(stringObjectMap.get("weekday")) ,String.valueOf(stringObjectMap.get("sum")) );
+            map.put("a" + String.valueOf(stringObjectMap.get("weekday")), String.valueOf(stringObjectMap.get("sum")));
         }
         return map;
     }

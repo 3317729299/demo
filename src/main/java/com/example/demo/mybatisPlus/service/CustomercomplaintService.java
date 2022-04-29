@@ -16,7 +16,8 @@ import java.util.Map;
  */
 public interface CustomercomplaintService extends IService<Customercomplaint> {
 
-    public List<Customercomplaint> listToday ();
+    public List<Customercomplaint> listToday();
+
     List<Map<String, Object>> ListWeek();
 
     Map<String, Object> week();

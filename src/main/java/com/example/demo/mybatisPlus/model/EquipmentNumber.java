@@ -5,8 +5,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 
 import java.time.LocalDate;
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -25,7 +28,7 @@ import lombok.experimental.Accessors;
 @TableName("pp_equipment_number")
 public class EquipmentNumber implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 学号

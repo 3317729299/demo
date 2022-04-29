@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 @Slf4j*/
 public class dynamicAspect {
     @Before("within(com.example.demo.mybatisPlus.controller.*) && @annotation(ds)")
-    public void before( DS ds){
-       String name= ds.value();
+    public void before(DS ds) {
+        String name = ds.value();
 
 
         Dynamic.name.set(name);

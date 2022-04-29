@@ -1,8 +1,6 @@
 package com.example.demo.mybatisPlus.controller;
 
 
-
-
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.mybatisPlus.model.Customercomplaint;
 import com.example.demo.mybatisPlus.service.CustomercomplaintService;
@@ -30,83 +28,91 @@ import java.util.Map;
 public class CustomercomplaintController {
     @Autowired
     private CustomercomplaintService customercomplaintService;
+
     @RequestMapping("/list")
     @ResponseBody
-    public List<Customercomplaint> list(){
-        return  customercomplaintService.list();
+    public List<Customercomplaint> list() {
+        return customercomplaintService.list();
 
     }
 
     /**
      * 当天的抱怨情况
+     *
      * @return
      */
     @RequestMapping("/listToday")
     @ResponseBody
-    public List<Customercomplaint> listToday(){
-        return  customercomplaintService.listToday();
+    public List<Customercomplaint> listToday() {
+        return customercomplaintService.listToday();
 
     }
 
 
     /**
      * 本周的抱怨情况
+     *
      * @return
      */
     @RequestMapping("/listWeek")
     @ResponseBody
-    public List<Map<String,Object>> listWeek(){
-        return  customercomplaintService.ListWeek();
+    public List<Map<String, Object>> listWeek() {
+        return customercomplaintService.ListWeek();
 
     }
 
     /**
      * 本周的抱怨情况
+     *
      * @return
      */
     @RequestMapping("/week")
     @ResponseBody
-    public Map<String,Object> week(){
+    public Map<String, Object> week() {
         /*String jsonString = JSONObject.toJSONString( customercomplaintService.week());*/
-        return  customercomplaintService.week();
+        return customercomplaintService.week();
 
     }
 
     /**
      * 跳转到报表页面
+     *
      * @return
      */
     @RequestMapping("/index")
-    public String index(){
+    public String index() {
         return "echarts";
     }
 
 
     /**
      * 跳转到报表页面
+     *
      * @return
      */
     @RequestMapping("/oEE")
-    public String oEE(){
+    public String oEE() {
         return "oEE";
     }
 
     /**
      * 跳转到报表页面
+     *
      * @return
      */
     @RequestMapping("/bootstrap")
-    public String bootstrap(){
+    public String bootstrap() {
         return "bootstrap";
     }
 
 
     /**
      * 跳转到报表页面
+     *
      * @return
      */
     @RequestMapping("/hanThink")
-    public String layui(){
+    public String layui() {
         return "HanThink";
     }
 

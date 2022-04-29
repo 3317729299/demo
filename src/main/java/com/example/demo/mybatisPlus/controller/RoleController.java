@@ -28,6 +28,7 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+
     @DS("R")
     @GetMapping("/list")
     public List<Role> roleAndMenu() {

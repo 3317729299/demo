@@ -24,7 +24,8 @@ import java.util.Map;
 public class EquipmentNumberServiceImpl extends ServiceImpl<EquipmentNumberMapper, EquipmentNumber> implements EquipmentNumberService {
 
     @Autowired(required = false)
-    private  EquipmentNumberMapper equipmentNumberMapper;
+    private EquipmentNumberMapper equipmentNumberMapper;
+
     @Override
     public List<EquipmentNumber> getStation(Map<String, Object> map) {
         return equipmentNumberMapper.getStation(map);
@@ -34,8 +35,8 @@ public class EquipmentNumberServiceImpl extends ServiceImpl<EquipmentNumberMappe
     public List<String> listByModel(Map<String, Object> map) {
 
         //新建一个list 存储 product + 满足条件的所有工位
-        List<String> stationList=new ArrayList<>();
-        List<EquipmentNumber> equipmentNumbers= equipmentNumberMapper.listByModel(map);
+        List<String> stationList = new ArrayList<>();
+        List<EquipmentNumber> equipmentNumbers = equipmentNumberMapper.listByModel(map);
         stationList.add("product");
         for (EquipmentNumber equipmentNumber : equipmentNumbers) {
             stationList.add(equipmentNumber.getStation());

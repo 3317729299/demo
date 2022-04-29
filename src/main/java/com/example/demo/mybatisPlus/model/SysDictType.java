@@ -1,8 +1,11 @@
 package com.example.demo.mybatisPlus.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 
 import com.example.demo.mybatisPlus.annotation.ExportConfig;
@@ -23,25 +26,25 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SysDictType implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 字典主键
      */
-    @ExportConfig(name = "字典主键",column = "A")
+    @ExportConfig(name = "字典主键", column = "A")
     @TableId(value = "dict_id", type = IdType.AUTO)
     private Long dictId;
 
     /**
      * 字典名称
      */
-    @ExportConfig(name = "字典名称",column = "B")
+    @ExportConfig(name = "字典名称", column = "B")
     private String dictName;
 
     /**
      * 字典类型
      */
-    @ExportConfig(name = "字典类型",column = "C")
+    @ExportConfig(name = "字典类型", column = "C")
     private String dictType;
 
     /**

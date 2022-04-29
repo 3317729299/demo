@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public interface CustomercomplaintMapper extends BaseMapper<Customercomplaint> {
 
-    public List<Customercomplaint> listToday ();
+    public List<Customercomplaint> listToday();
 
     List<Map<String, Object>> ListWeek();
 

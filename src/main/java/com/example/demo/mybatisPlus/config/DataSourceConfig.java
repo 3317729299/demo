@@ -15,16 +15,16 @@ import javax.sql.DataSource;
 /*@Configuration //标明是一个配置类*/
 public class DataSourceConfig {
     //数据源1
-     @Bean
-     @ConfigurationProperties(prefix = "spring.datasource.datasource1")
-    public DataSource dataSource1(){
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.datasource1")
+    public DataSource dataSource1() {
         return DruidDataSourceBuilder.create().build();
     }
 
     //数据源2
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.datasource2")
-    public DataSource dataSource2(){
+    public DataSource dataSource2() {
         return DruidDataSourceBuilder.create().build();
     }
 }

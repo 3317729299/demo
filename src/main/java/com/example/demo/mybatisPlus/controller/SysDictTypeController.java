@@ -36,17 +36,17 @@ public class SysDictTypeController {
     /**
      * poi 导出excel
      * 1.在实体类需要导出的字段加上自定义注解 @ExportConfig
+     *
      * @param request
      * @param response
      */
     @RequestMapping("/excel")
-    public void getOne(HttpServletRequest request, HttpServletResponse response){
-        List<SysDictType>  list=sysDictTypeService.list();
+    public void getOne(HttpServletRequest request, HttpServletResponse response) {
+        List<SysDictType> list = sysDictTypeService.list();
         ExcelUtil<SysDictType> export = new ExcelUtil<>(SysDictType.class, response, false);
         export.exportExcel(list, "字典类型表", -1);
 
     }
-
 
 
 }

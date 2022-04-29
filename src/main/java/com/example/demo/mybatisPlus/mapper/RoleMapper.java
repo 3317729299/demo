@@ -17,10 +17,11 @@ import java.util.List;
 @Repository
 public interface RoleMapper extends BaseMapper<Role> {
 
-     /**
-      * 查询角色和菜单
-      * @return
-      */
-     List<Role> roleAndMenu ();
+    /**
+     * 查询角色和菜单
+     *
+     * @return
+     */
+    List<Role> roleAndMenu();
 
 }

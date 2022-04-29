@@ -2,8 +2,11 @@ package com.example.demo.mybatisPlus.model;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
+
 import java.util.Date;
+
 import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -25,7 +28,7 @@ import lombok.experimental.Accessors;
 @TableName("sys_role")
 public class Role implements Serializable {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 角色ID
@@ -97,7 +100,6 @@ public class Role implements Serializable {
      * 备注
      */
     private String remark;
-
 
 
     private List<RoleMenu> menus;
