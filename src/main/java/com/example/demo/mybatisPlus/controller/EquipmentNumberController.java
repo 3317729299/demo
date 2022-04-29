@@ -135,7 +135,10 @@ public class EquipmentNumberController {
         }
         //值不为空就 去掉后面的，传值
         if (sb.length() > 0) {
-            map.put("stations", sb.substring(0, sb.length() - 1));
+           if(!"''".equals(sb.substring(0, sb.length() - 1))) {
+               map.put("stations", sb.substring(0, sb.length() - 1));
+           }
+
         }
 
         String startDate = (String) map.get("startDate");
@@ -193,7 +196,10 @@ public class EquipmentNumberController {
         }
         //值不为空就 去掉后面的，传值
         if (sb.length() > 0) {
-            map.put("stations", sb.substring(0, sb.length() - 1));
+            if(!"''".equals(sb.substring(0, sb.length() - 1))) {
+                map.put("stations", sb.substring(0, sb.length() - 1));
+            }
+
         }
         return equipmentNumberService.tableDataByModel(map);
 

@@ -19,9 +19,15 @@
         id, work_shop, production_line, station, shift, serial_number, date, qualified
     </sql>
     <select id="getStation" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
-        select distinct  station from PP_EQUIPMENT_NUMBER
+        select distinct  station from PP_EQUIPMENT_NUMBER  where 1=1
+        <if test="workShop!=null  and workShop!=''">
+            and work_shop = #{workShop}
+        </if>
+        <if test="productionLine!=null  and productionLine!=''">
+            and production_line = #{productionLine}
+        </if>
         <if test="shift!=null  and shift!=''">
-            where shift = #{shift}
+            and shift = #{shift}
         </if>
 
     </select>
@@ -105,9 +111,14 @@
     </select>
     <select id="getShift" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
         select  distinct shift   from PP_EQUIPMENT_NUMBER
-        <if test="productionLine!=null  and productionLine!=''">
-            where production_line = #{productionLine}
+        where 1=1
+        <if test="workShop!=null  and workShop!=''">
+            and work_shop = #{workShop}
         </if>
+        <if test="productionLine!=null  and productionLine!=''">
+            and production_line = #{productionLine}
+        </if>
+
     </select>
     <select id="getWorkShop" resultType="com.example.demo.mybatisPlus.model.EquipmentNumber">
         select  distinct work_shop   from PP_EQUIPMENT_NUMBER

@@ -35,11 +35,7 @@ public class EquipmentNumberServiceImpl extends ServiceImpl<EquipmentNumberMappe
 
         //新建一个list 存储 product + 满足条件的所有工位
         List<String> stationList=new ArrayList<>();
-
-
-
         List<EquipmentNumber> equipmentNumbers= equipmentNumberMapper.listByModel(map);
-
         stationList.add("product");
         for (EquipmentNumber equipmentNumber : equipmentNumbers) {
             stationList.add(equipmentNumber.getStation());
