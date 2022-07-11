@@ -39,8 +39,11 @@ public class lambda {
 
         //lambda实现
 
-        new Thread(() -> {
-            System.out.println("world");
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("world");
+            }
         }).start();
 
 

@@ -3,6 +3,7 @@ package com.example.demo.mybatisplus.model;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -49,6 +50,7 @@ public class Customercomplaint implements Serializable {
      * 问题数量(质量)
      */
     private Integer complainNumber;
+
 
 
 }
