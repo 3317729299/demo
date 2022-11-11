@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    let result;
+    let date = new Date();
+    let CurrentUser = Resources["CurrentSessionInfo"].GetCurrentUser();
+    let ID;
+    let resulttable = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+        infoTableName: "MD_HUMAN_InfoTable",
+        dataShapeName: "MD_HUMAN_Shape"
+    });
+    try {
+      
+        let content ="export -- data:";
+       
+        if(row && row.length>0)
+        {
+            for(let i=0;i<row.length;i++)
+            {
+                if(row[i].Checkbox == true)
+                {
+                    resulttable.AddRow(row[i]);
+                }
+            }
+        }
+        else
+        {
+            let table =me.Query({
+                MATERIAL_NO: undefined /* STRING */,
+                SELECTED_SET_NAME: undefined /* STRING */,
+                PW_POINT_CODE: undefined /* STRING */,
+                ROOM_CODE: undefined /* STRING */
+            });
+            for(let j=0;j<table.length;j++)
+            {
+                resulttable.AddRow(table[j]);
+            }
+        }
+
+        let jsondata = Resources["InfoTableFunctions"].ToJSON({
+            table: resulttable /* INFOTABLE */
+        });
+        let logdata = jsondata["rows"];
+        content = content +JSON.stringify(logdata);
+        ID = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "MD_HUMAN:Export" /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: content /* STRING */,
+            LEVEL: "INFO" /* STRING */,
+            MASHUP_NAME: "HUMAN_Main" /* STRING */
+        });
+        result = resulttable;
+
+    } catch(err) {
+        ID = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "MD_HUMAN:Export" /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: err.message /* STRING */,
+            LEVEL: "ERROR" /* STRING */,
+            MASHUP_NAME: "HUMAN_Main" /* STRING */
+        });
+    }
+
+
+</script>
+</body>
+</html>

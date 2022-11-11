@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    //修改  -- 主键 定性3 提交人 提交时间 临时状态=1 --新增到临时表  存在则删除 再新增
+    let result =0;
+    let CurrentUser = Resources['CurrentSessionInfo'].GetCurrentUser();
+    let date = new Date();
+    try{
+        let content ={
+            "olddata":{},
+            "newdata":{},
+        };
+
+        let query = {
+            "filters":{
+                "type":"AND",
+                "filters":[
+                    {
+                        "type":"EQ",
+                        "fieldName":"HUMAN_ID",
+                        "value":HUMAN_ID,
+                    },
+                    {
+                        "type":"EQ",
+                        "fieldName":"SUBMITTER",
+                        "value":CurrentUser,
+                    },
+                ]
+            }
+        };
+        let exit_table = me.SearchDataTableEntries({
+            maxItems: undefined /* NUMBER */,
+            searchExpression: undefined /* STRING */,
+            query: query /* QUERY */,
+        });
+        if(exit_table.getRowCount() >= 1 )
+        {
+            let Values = me.CreateValues();
+            Values.TEMP_ID=exit_table[0].TEMP_ID;
+            Values.CWID=exit_table[0].CWID;
+            Values.PERSON_NAME=exit_table[0].PERSON_NAME;
+            Values.IS_SEND=exit_table[0].IS_SEND;
+            Values.IS_SEND_STR=exit_table[0].IS_SEND_STR;
+
+            Values.SEX_STR=exit_table[0].SEX;
+            Values.SEX_STR=exit_table[0].SEX_STR;
+            Values.DEPARTMENT_NO=exit_table[0].DEPARTMENT_NO;
+
+            Values.DEPARTMENT_NAME=exit_table[0].DEPARTMENT_NAME;
+            Values.STATION=exit_table[0].STATION;
+            Values.JOB_CODE_ID=exit_table[0].JOB_CODE_ID;
+
+
+            Values.SUBMITTER=exit_table[0].SUBMITTER;
+            Values.SUBMIT_TIME=exit_table[0].SUBMIT_TIME;
+            Values.STATUS = exit_table[0].STATUS;
+            Values.STATUS_DESC = exit_table[0].STATUS_DESC;
+            let data = Resources["InfoTableFunctions"].ToJSON({
+                table:Values
+            });
+            content["olddata"]=data["rows"];
+            me.DeleteDataTableEntry({
+                values: Values /* INFOTABLE */
+            });
+        }
+        //获取最后最大的ID
+        // 排序条件
+        let sort = {
+            name: "TEMP_ID",
+            ascending: false
+        };
+        //获取QM检项标准最大的CHECK_ITEM_ID
+        let tableMaxId = me.SearchDataTableEntries();
+        tableMaxId.Sort(sort);
+        let ID = 1;
+        if(tableMaxId.length > 0){
+            ID = parseInt(tableMaxId[0].TEMP_ID);
+        }
+        let Values = me.CreateValues();
+        Values.TEMP_ID=parseInt(TEMP_ID)+1;
+        Values.HUMAN_ID=HUMAN_ID;
+        Values.CWID=CWID;
+        Values.PERSON_NAME=PERSON_NAME;
+        Values.IS_SEND=IS_SEND;
+        Values.IS_SEND_STR=IS_SEND_STR;
+        Values.SEX=SEX;
+        Values.SEX_STR=SEX_STR;
+
+        Values.DEPARTMENT_NO=DEPARTMENT_NO;
+        Values.DEPARTMENT_NAME=DEPARTMENT_NAME;
+        Values.STATION=STATION;
+        Values.JOB_CODE_ID=JOB_CODE_ID;
+
+        Values.SUBMITTER=CurrentUser;
+        Values.SUBMIT_TIME=date;
+        Values.STATUS = 1; //已生成
+        Values.STATUS_DESC = "已生成";
+        let data1 = Resources["InfoTableFunctions"].ToJSON({
+            table:Values
+        });
+        content["newdata"]=data1["rows"];
+        let id = me.AddDataTableEntry({
+            sourceType: undefined /* STRING */,
+            values: Values /* INFOTABLE */,
+            location: undefined /* LOCATION */,
+            source: undefined /* STRING */,
+            tags: undefined /* TAGS */
+        });
+        //记录日志
+        let log = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "TEMP_HUMAN:MODIFY" /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: JSON.stringify(content) /* STRING */,
+            LEVEL: "INFO" /* STRING */,
+            MASHUP_NAME: "TEMP_HUMAN_Dialog" /* STRING */
+        });
+        result =1;
+    }
+    catch(error)
+    {
+        let log = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "TEMP_HUMAN:MODIFY"  /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: error.message /* STRING */,
+            LEVEL: "ERROR" /* STRING */,
+            MASHUP_NAME: "TEMP_HUMAN_Dialog" /* STRING */
+        });
+
+    }
+</script>
+
+</body>
+</html>

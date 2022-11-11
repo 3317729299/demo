@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    let CurrentUser = Resources["CurrentSessionInfo"].GetCurrentUser();
+    let date = new Date();
+    let result =0;
+    let content = "delete: data:";
+    try{
+        let data = [];
+        if(name && password && row)
+        {
+            if(name.equals("Administrator") && password.equals("thingworxadmin"))
+            {
+                if(row.length>0)
+                {
+                    for(let i=0;i<row.length;i++)
+                    {
+                        if(row[i].Checkbox)
+                        {
+                            let query = {
+                                "filters":{
+                                    "type":"EQ",
+                                    "fieldName":"HUMAN_ID",
+                                    "value":parseInt(row[i].HUMAN_ID)
+                                }
+                            };
+                            let table = me.SearchDataTableEntries({
+                                maxItems: undefined /* NUMBER */,
+                                searchExpression: undefined /* STRING */,
+                                tags: undefined /* TAGS */,
+                                query: query /* QUERY */,
+                                source: undefined /* STRING */
+                            });
+                            let jsondata = Resources["InfoTableFunctions"].ToJSON({
+                                table: table /* INFOTABLE */
+                            });
+                            data.push(jsondata["rows"]);
+                            Things["TEMP_HUMAN"].DeleteDataTableEntriesWithQuery({
+                                tags: undefined /* TAGS */,
+                                location: undefined /* LOCATION */,
+                                source: undefined /* STRING */,
+                                sourceType: undefined /* STRING */,
+                                values: undefined /* INFOTABLE */,
+                                query: query /* QUERY */
+                            });
+                            me.DeleteDataTableEntriesWithQuery({
+                                tags: undefined /* TAGS */,
+                                location: undefined /* LOCATION */,
+                                source: undefined /* STRING */,
+                                sourceType: undefined /* STRING */,
+                                values: undefined /* INFOTABLE */,
+                                query: query /* QUERY */
+                            });
+                        }
+                    }
+                    content = content+JSON.stringify(data);
+                    let log = Things["BUSINESS_LOG"].ADD_LOG({
+                        SERVICE_NAME: "MD_PW_POINT:DeleteData" /* STRING */,
+                        SUBMIT_TIME: date /* DATETIME */,
+                        SUBMIT_USER: CurrentUser /* STRING */,
+                        CONTENT: content /* STRING */,
+                        LEVEL: "INFO" /* STRING */,
+                        MASHUP_NAME: "HUMAN_Remark_Dialog" /* STRING */
+                    });
+                    result =1;
+                }
+            }
+        }
+    }
+    catch(error)
+    {
+        let log = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "MD_PW_POINT:DeleteData" /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: error.message /* STRING */,
+            LEVEL: "ERROR" /* STRING */,
+            MASHUP_NAME: "HUMAN_Remark_Dialog" /* STRING */
+        });
+    }
+</script>
+
+</body>
+</html>

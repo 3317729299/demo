@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //修改   --新增到临时表  存在则删除 再新增
+    let result =0;
+    let CurrentUser = Resources['CurrentSessionInfo'].GetCurrentUser();
+    let date = new Date();
+    try{
+        if(PW_ID && PW_POINT_CODE && PW_POINT_NAME && TOC_ACTION_LV)
+        {
+            let content ={
+                "olddata":{},
+                "newdata":{},
+            };
+
+            let query = {
+                "filters":{
+                    "type":"AND",
+                    "filters":[
+                        {
+                            "type":"EQ",
+                            "fieldName":"PW_ID",
+                            "value":parseInt(PW_ID),
+                        },
+                        {
+                            "type":"EQ",
+                            "fieldName":"SUBMITTER",
+                            "value":CurrentUser,
+                        },
+                    ]
+                }
+            };
+            let exit_table = me.SearchDataTableEntries({
+                query: query /* QUERY */,
+            });
+            if(exit_table.getRowCount() == 1 )
+            {
+                let Values = me.CreateValues();
+                Values =exit_table;
+                let data = Resources["InfoTableFunctions"].ToJSON({
+                    table:Values
+                });
+                content["olddata"]=data["rows"];
+                me.DeleteDataTableEntry({
+                    values: Values /* INFOTABLE */
+                });
+            }
+            //获取最后最大的TEMP_ID
+            let len = me.GetDataTableEntryCount();
+            let table = me.GetDataTableEntries({
+                maxItems: len /* NUMBER */
+            });
+            let TEMP_ID=0;
+            for(let i=0;i<len;i++)
+            {
+                if(table[i].TEMP_ID>TEMP_ID)
+                {
+                    TEMP_ID = table[i].TEMP_ID;
+                }
+            }
+            let Values = me.CreateValues();
+            Values.TEMP_ID=parseInt(TEMP_ID)+1;
+            Values.PW_ID=parseInt(PW_ID);
+            Values.PW_POINT_CODE=PW_POINT_CODE;
+            Values.PW_POINT_NAME=PW_POINT_NAME;
+            Values.TOC_ACTION_LV=parseInt(TOC_ACTION_LV);
+            Values.TOC_UNIT=TOC_UNIT;
+            Values.CONDUCTIVITY_ACTION_LV=parseInt(CONDUCTIVITY_ACTION_LV);
+            Values.CONDUCTIVITY_UNIT=CONDUCTIVITY_UNIT;
+            Values.PRODUCT_LINE_CODE=PRODUCT_LINE_CODE;
+            Values.SUBMITTER=CurrentUser;
+            Values.SUBMIT_TIME=date;
+            Values.STATUS = 1; //已生成
+            Values.STATUS_DESC = "已生成";
+            let data1 = Resources["InfoTableFunctions"].ToJSON({
+                table:Values
+            });
+            content["newdata"]=data1["rows"];
+            let id = me.AddDataTableEntry({
+                values: Values /* INFOTABLE */,
+            });
+            //记录日志
+            let log = Things["BUSINESS_LOG"].ADD_LOG({
+                SERVICE_NAME: "TEMP_PW_POINT:Modify" /* STRING */,
+                SUBMIT_TIME: date /* DATETIME */,
+                SUBMIT_USER: CurrentUser /* STRING */,
+                CONTENT: JSON.stringify(content) /* STRING */,
+                LEVEL: "INFO" /* STRING */,
+                MASHUP_NAME: "PurifiedWaterPointMasterData_Main" /* STRING */
+            });
+            result =1;
+        }
+        else
+        {
+            let log = Things["BUSINESS_LOG"].ADD_LOG({
+                SERVICE_NAME: "TEMP_PW_POINT:Modify" /* STRING */,
+                SUBMIT_TIME: date /* DATETIME */,
+                SUBMIT_USER: CurrentUser /* STRING */,
+                CONTENT: " PW_ID,PW_POINT_CODE,PW_POINT_NAME,TOC_ACTION_LV 不能为空" /* STRING */,
+                LEVEL: "INFO" /* STRING */,
+                MASHUP_NAME: "PurifiedWaterPointMasterData_Main" /* STRING */
+            });
+            result =0;
+        }
+    }
+    catch(error)
+    {
+        let log = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "TEMP_PW_POINT:Modify"  /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: error.message /* STRING */,
+            LEVEL: "ERROR" /* STRING */,
+            MASHUP_NAME: "PurifiedWaterPointMasterData_Main" /* STRING */
+        });
+
+    }
+
+
+
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //获取当前用户 --  搜索临时表 查看当前用户是否修改过表数据
+    let currentUser = Resources["CurrentSessionInfo"].GetCurrentUser();//获取当前登录的用户
+    let arr = {};
+    let query = {
+        "filters": {
+            "type": "AND",
+            "filters": []
+        }
+    };
+    if (METER_CODE) {
+        arr = {
+            "type": "LIKE",
+            "fieldName": "METER_CODE",
+            "value": "%" + METER_CODE + "%",
+        };
+        query["filters"]["filters"].push(arr);
+    }
+    if (METER_NAME) {
+        arr = {
+            "type": "LIKE",
+            "fieldName": "METER_NAME",
+            "value": "%" + METER_NAME + "%",
+        };
+        query["filters"]["filters"].push(arr);
+    }
+    if (EQUIPMENT_CODE) {
+        arr = {
+            "type": "LIKE",
+            "fieldName": "EQUIPMENT_CODE",
+            "value": "%" + EQUIPMENT_CODE + "%",
+        };
+        query["filters"]["filters"].push(arr);
+    }
+
+    if (METER_FUNCTIONAL_LOCATION) {
+        arr = {
+            "type": "LIKE",
+            "fieldName": "METER_FUNCTIONAL_LOCATION",
+            "value": "%" + METER_FUNCTIONAL_LOCATION + "%",
+        };
+        query["filters"]["filters"].push(arr);
+    }
+
+
+    if (EQUIPMENT_FUNCTIONAL_LOCATION) {
+        arr = {
+            "type": "LIKE",
+            "fieldName": "EQUIPMENT_FUNCTIONAL_LOCATION",
+            "value": "%" + EQUIPMENT_FUNCTIONAL_LOCATION + "%",
+        };
+        query["filters"]["filters"].push(arr);
+    }
+
+    let resulttable = Resources["InfoTableFunctions"].CreateInfoTableFromDataShape({
+        infoTableName: "MD_METER_InfoTable",
+        dataShapeName: "MD_METER_Shape"
+    });
+    //根据查询条件查询 正式表数据
+    let table = me.SearchDataTableEntries({
+        maxItems: undefined /* NUMBER */,
+        searchExpression: undefined /* STRING */,
+        query: query /* QUERY */,
+    });
+    arr = {
+        "type": "EQ",
+        "fieldName": "SUBMITTER",
+        "value": currentUser
+    };
+
+    //添加 提交人为当前登录人条件 查询 临时表数据
+    query["filters"]["filters"].push(arr);
+
+
+    let temptable = Things["TEMP_METER"].SearchDataTableEntries({
+        query: query /* QUERY */,
+    });
+    let templen = temptable.getRowCount();
+
+
+    for (let i = 0; i < table.getRowCount(); i++) {
+        let x = 1;
+        let tablerow = table.getRow(i);
+        if (templen > 0) {
+            for (let j = 0; j < templen; j++) {
+                let temptablerow = temptable.getRow(j);
+                if (tablerow.METER_ID == temptablerow.METER_ID) {
+                    resulttable.AddRow(temptablerow);
+                } else {
+                    x++;
+                }
+            }
+            if (x > templen) {
+                resulttable.AddRow(tablerow);
+            }
+        } else {
+            resulttable.AddRow(tablerow);
+        }
+    }
+    //新增的数据
+    for (let i = 0; i < templen; i++) {
+        let x = 1;
+        let temptablerow = temptable.getRow(i);
+        for (let j = 0; j < table.length; j++) {
+            let tablerow = table.getRow(j);
+            if (tablerow.METER_ID == temptablerow.METER_ID) {
+                break;
+            }
+            x++;
+        }
+        if (x > table.length) {
+            let values = me.CreateValues();
+            values = temptablerow;
+            values.CREATE_USER = temptablerow.SUBMITTER;
+            values.CREATE_TIME = temptablerow.SUBMIT_TIME;
+            resulttable.AddRow(values);
+        }
+    }
+    let result = resulttable;
+
+    !(isNaN(parseInt(MANU_STAN_RATING)) || MANU_STAN_RATING =="") ;
+
+    (isNaN(parseInt(MANU_STAN_RATING))&&MANU_STAN_RATING !="")
+
+    (MANU_STAN_RATING !=""&&isNaN(parseInt(MANU_STAN_RATING)));
+
+    !(isNaN(parseInt(TOC)) || TOC =="") && (!(isNaN(parseInt(CONDUCTIVITY))) || CONDUCTIVITY =="");
+
+    (MANU_STAN_RATING !="" && isNaN(parsInt(MANU_STAN_RATING)))
+    ||(MANU_STAN_DOWN !="" &&  isNaN(parsInt(MANU_STAN_DOWN)))
+    ||(MANU_STAN_UP !="" &&  isNaN(parsInt(MANU_STAN_UP)))
+</script>
+
+</body>
+</html>

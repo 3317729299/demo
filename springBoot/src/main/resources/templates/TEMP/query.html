@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+let value = 3;
+//获取当前登录的用户名
+let currentuser = Resources["CurrentSessionInfo"].GetCurrentUser();
+//获取当前的用户组
+let grouplist = Resources["CurrentSessionInfo"].GetCurrentUserGroups();
+let groupname = "Test_Group"; //假设数据维护人都在Test_Group中。
+//判断当前登录的用户所属的用户组是数据维护人还是复核人 1--数据维护人员   2--复核人员
+let i=0;
+for(i;i<grouplist.length;i++)
+{
+if(groupname == grouplist[i].name)
+{
+value = 1;
+break;
+}
+}
+if(i == grouplist.length)
+{
+value = 2;  //待审核
+}
+let query;
+
+
+if(value == 2 )  //复核人员    能看到待审核的和自己提交的
+{
+query = {
+"filters": {
+"type": "OR",
+"filters": [
+{
+"type": "EQ",
+"fieldName": "STATUS",
+"value": 2
+},
+{
+"type": "EQ",
+"fieldName": "SUBMITTER",
+"value": currentuser
+}
+]
+}
+};
+}else
+{                       //数据维护人员   能看到复核进度
+query = {
+"filters": {
+"type": "AND",
+"filters": [
+{
+"type": "EQ",
+"fieldName": "SUBMITTER",
+"value": currentuser
+}
+]
+}
+};
+}
+let result = me.SearchDataTableEntries({
+maxItems: undefined /* NUMBER */,
+searchExpression: undefined /* STRING */,
+query: query /* QUERY */,
+source: undefined /* STRING */,
+tags: undefined /* TAGS */
+});
+
+
+
+
+</body>
+</html>

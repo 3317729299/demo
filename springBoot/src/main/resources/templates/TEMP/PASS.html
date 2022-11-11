@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+
+    let result =0;
+    let CurrentUser = Resources["CurrentSessionInfo"].GetCurrentUser();
+    let date = new Date();
+    let content={
+        "data":[]
+    };
+    try{
+        if(row && row.length >0)
+        {
+            for(let i=0;i<row.length;i++)
+            {
+                if(row[i].Checkbox == true)
+                {
+                    let Value = me.CreateValues();
+                    Value.TEMP_ID = row[i].TEMP_ID;
+                    let table = me.GetDataTableEntry({
+                        values: Value /* INFOTABLE */
+                    });
+                    //删除临时表后更新主表
+                    me.DeleteDataTableEntry({
+                        values: Value /* INFOTABLE */
+                    });
+                    let query = {
+                        "filters":{
+                            "type":"EQ",
+                            "fieldName":"HUMAN_ID",
+                            "value":table.HUMAN_ID
+                        }
+                    };
+                    let maintable = Things["MD_HUMAN"].SearchDataTableEntries({
+                        query: query /* QUERY */,
+                    });
+                    let  mainValue = Things["MD_HUMAN"].CreateValues();
+                    //新增还是修改  有则修改
+                    if(maintable.length>0)
+                    {
+                        mainValue = maintable;
+                    }
+                    else
+                    {
+                        mainValue.HUMAN_ID = table.HUMAN_ID;
+                        mainValue.CWID =table.CWID;
+                        mainValue.CREATE_USER = table.SUBMITTER;
+                        mainValue.CREATE_TIME = table.SUBMIT_TIME;
+                    }
+                    mainValue.PERSON_NAME =table.PERSON_NAME;
+                    mainValue.IS_SEND = table.IS_SEND;
+                    mainValue.IS_SEND_STR = table.IS_SEND_STR;
+                    mainValue.SEX =table.SEX;
+                    mainValue.SEX_STR =table.SEX_STR;
+                    mainValue.DEPARTMENT_NO =table.DEPARTMENT_NO;
+                    mainValue.DEPARTMENT_NAME =table.DEPARTMENT_NAME;
+                    mainValue.STATION =table.STATION;
+                    mainValue.JOB_CODE_ID =table.JOB_CODE_ID;
+
+                    mainValue.SUBMITTER = table.SUBMITTER;
+                    mainValue.SUBMIT_TIME = table.SUBMIT_TIME;
+                    mainValue.LAST_MODIFY_USER = table.SUBMITTER;
+                    mainValue.LAST_MODIFY_TIME = table.SUBMIT_TIME;
+                    mainValue.DATA_REVIEWER = CurrentUser;
+                    mainValue.DATA_REVIEW_TIME = date;
+                    Things["MD_HUMAN"].AddOrUpdateDataTableEntry({
+                        values: mainValue /* INFOTABLE */
+                    });
+                    let data =  Resources["InfoTableFunctions"].ToJSON( {
+                        table: mainValue /* INFOTABLE */
+                    });
+                    content["data"].push(data["rows"]);
+                }
+            }
+            let log = Things["BUSINESS_LOG"].ADD_LOG({
+                SERVICE_NAME: "MD_HUMAN:Review_Pass" /* STRING */,
+                SUBMIT_TIME: date /* DATETIME */,
+                SUBMIT_USER: CurrentUser /* STRING */,
+                CONTENT: JSON.stringify(content) /* STRING */,
+                LEVEL: "INFO" /* STRING */,
+                MASHUP_NAME: "MD_HUMAN_Main" /* STRING */
+            });
+            result =1;
+        }
+
+    }
+    catch(error)
+    {
+        let log = Things["BUSINESS_LOG"].ADD_LOG({
+            SERVICE_NAME: "MD_HUMAN:Review_Pass" /* STRING */,
+            SUBMIT_TIME: date /* DATETIME */,
+            SUBMIT_USER: CurrentUser /* STRING */,
+            CONTENT: error.message /* STRING */,
+            LEVEL: "ERROR" /* STRING */,
+            MASHUP_NAME: "MD_HUMAN_Main" /* STRING */
+        });
+    }
+</script>
+
+</body>
+</html>
